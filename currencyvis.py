@@ -5,7 +5,7 @@ import os.path
 
 money_hold = 0
 path = "currency.json"
-
+#TODO start program with current money value // program doesn't show proper current money value when starting İMPORTANT!
 def set_data(money):
      curDate = datetime.datetime.now()
      date = curDate.strftime(F"Date : %d.%m.%Y")
