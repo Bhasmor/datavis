@@ -3,9 +3,13 @@ import datetime
 import json
 import os.path
 
+
 money_hold = 0
 path = "currency.json"
-#TODO start program with current money value // program doesn't show proper current money value when starting İMPORTANT!
+
+#TODO add a label shows the "todays" added money 
+
+
 def set_data(money):
      curDate = datetime.datetime.now()
      date = curDate.strftime(F"Date : %d.%m.%Y")
@@ -19,6 +23,7 @@ def set_data(money):
         
     }
 
+
      if os.path.isfile(path):
          with open(path, "r") as outfile:
             json_object = json.load(outfile)
@@ -31,14 +36,28 @@ def set_data(money):
             
      else:
          with open(path, "w") as outfile:
-             json.dump(my_currency, outfile , indent=4)             
-    
+             json.dump(my_currency, outfile , indent=4)
+         with open(path, "r") as outfile:
+            json_object = json.load(outfile)         
+            for i in json_object["days"]:
+                money_hold += i["money"]
 
 def get_data():
      with open(path, 'r') as openfile:
         json_object = json.load(openfile)
-     return json_object
+        for i in json_object["days"]:
+            global money_hold
+            money_hold += i["money"]
+            money_holder.set(F"Current Money = {money_hold}")
 
+
+def submit(): 
+    global money_hold
+    money=money_var.get()
+    set_data(money)
+    money_var.set("")  
+    money_holder.set(F"Current Money = {money_hold}")
+    money_hold = 0
 
 
 master=tk.Tk() 
@@ -48,14 +67,12 @@ money_var=tk.IntVar()
 money_holder = tk.IntVar()
 
 
-def submit(): 
-    global money_hold
-    money=money_var.get()
-    set_data(money)
-    money_var.set("")
-    money_holder.set(F"Current Money = {money_hold}")
+if os.path.isfile(path):     
+    get_data()
     money_hold = 0
-     
+
+else:
+    money_holder.set(F"Current Money = {money_hold}")
 
 money_label = tk.Label(master, text = 'Money', font=('calibre',15, 'bold'))
 money_entry = tk.Entry(master,textvariable = money_var, font=('calibre',15,'normal'))
